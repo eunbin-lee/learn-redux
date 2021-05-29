@@ -1,0 +1,41 @@
+<<<<<<< HEAD
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "리덕스 미들웨어",
+      "body": "직접 만들어보기"
+    },
+    {
+      "id": 2,
+      "title": "redux-thunk",
+      "body": "비동기 작업 처리하기"
+    },
+    {
+      "id": 3,
+      "title": "redux-saga",
+      "body": "나중에 배울 거예요"
+    }
+  ]
+}
+=======
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "리덕스 미들웨어",
+      "body": "직접 만들어보기"
+    },
+    {
+      "id": 2,
+      "title": "redux-thunk",
+      "body": "비동기 작업 처리하기"
+    },
+    {
+      "id": 3,
+      "title": "redux-saga",
+      "body": "나중에 배울 거예요"
+    }
+  ]
+}
+>>>>>>> b5a3bf1ab01ba3b559b25a1031c3b5bdcf03943b

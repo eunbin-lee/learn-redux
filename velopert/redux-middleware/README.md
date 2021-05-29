@@ -3,7 +3,7 @@
 ### [Set redux]
 
 1.  `yarn add redux react-redux`
-2.  root > src > modules
+2.  src > modules
 
     - action type
 
@@ -47,9 +47,9 @@
     export default rootReducer;
     ```
 
-3.  root > src > components
+3.  src > components
     - presentational components
-4.  root > src > container
+4.  src > container
 
     - container components
 
@@ -74,7 +74,7 @@
       export default CounterContainer;
       ```
 
-5.  root > index.js
+5.  index.js
 
     - Provider
     - createStore
@@ -100,7 +100,7 @@
 
 ### [Set redux middleware]
 
-1. root > src > middlewares
+1. src > middlewares
 
 ```javascript
 const middleware = (store) => (next) => (action) => {
@@ -109,7 +109,7 @@ const middleware = (store) => (next) => (action) => {
 };
 ```
 
-2. root > index.js
+2. index.js
 
    - applyMiddleware
 
@@ -127,7 +127,7 @@ const middleware = (store) => (next) => (action) => {
 ### [Set redux-logger]
 
 1.  `yarn add redux-logger`
-2.  root > index.js
+2.  index.js
 
     - logger
 
@@ -140,7 +140,7 @@ const middleware = (store) => (next) => (action) => {
 ### [Use redux dev tools on browser]
 
 1.  `yarn add redux-devtools-extension`
-2.  root > index.js
+2.  index.js
 
     - composeWithDevTools
 
@@ -153,7 +153,7 @@ const middleware = (store) => (next) => (action) => {
 ### [Set redux-thunk]
 
 1.  `yarn add redux-thunk`
-2.  root > index.js
+2.  index.js
 
     - ReduxThunk
 
@@ -161,7 +161,7 @@ const middleware = (store) => (next) => (action) => {
     import ReduxThunk from 'redux-thunk';
     ```
 
-3.  root > src > modules
+3.  src > modules
 
     - thunk creator
 
@@ -173,7 +173,7 @@ const middleware = (store) => (next) => (action) => {
     };
     ```
 
-4.  root > src > containers
+4.  src > containers
 
     - container components
 
@@ -203,7 +203,7 @@ const middleware = (store) => (next) => (action) => {
 
 ### [Use Promise with redux-thunk]
 
-1. root > src > api
+1. src > api
 
    - request API
 
@@ -211,7 +211,7 @@ const middleware = (store) => (next) => (action) => {
    const sleep = (n) => new Promise((resolve) => setTimeout(resolve, n));
    ```
 
-2. root > src > modules
+2. src > modules
 
    - request, success, error actions per request
 
@@ -293,9 +293,9 @@ const middleware = (store) => (next) => (action) => {
    export default rootReducer;
    ```
 
-3. root > src > components
+3. src > components
    - presentational components
-4. root > src > container
+4. src > container
 
    - container components
 
@@ -328,7 +328,7 @@ const middleware = (store) => (next) => (action) => {
        export default PostContainer;
        ```
 
-5. root > index.js
+5. index.js
 
    - Provider
    - createStore
@@ -361,7 +361,7 @@ const middleware = (store) => (next) => (action) => {
 ### [Set react-router]
 
 1. `yarn add react-router-dom`
-2. root > index.js
+2. index.js
 
    - BrowserRouter
 
@@ -378,7 +378,7 @@ const middleware = (store) => (next) => (action) => {
    );
    ```
 
-3. root > App.js
+3. App.js
 
    - route
 
@@ -396,3 +396,62 @@ const middleware = (store) => (next) => (action) => {
 
    export default App;
    ```
+
+<br>
+
+### [json-server]
+
+1. data.json 에 데이터 등록
+
+2. 서버 여는 방법
+
+   - `npx json-server ./data.json --port 4000`
+
+3. 데이터 호출
+
+   - src > api > posts.js
+
+   ```javascript
+   import axios from 'axios';
+
+   export const getPosts = async () => {
+     const response = await axios.get('http://localhost:4000/posts');
+     return response.data;
+   };
+   ```
+
+<br>
+
+### [CORS와 Webpack DevServer Proxy]
+
+브라우저에서 보여주고 있는 도메인과 호출하고 있는 api의 도메인이 다르면 <br>
+브라우저에서 해당 api에 대한 결과물을 조회할 수 없기 때문에 <br>
+CORS(Cross-origin resource sharing)를 따로 설정해줘야 하지만 <br>
+json-server에서는 어디서 오는 호출이든 허용하겠다고 이미 설정돼있어서 <br>
+추가적인 설정없이 api를 사용할 수 있다 <br>
+
+웹팩 개발서버의 프록시 설정은 원래 웹팩 설정을 통해 적용을 하지만 <br>
+CRA로 만들어진 프로젝트에서는 package.json에서 쉽게 설정이 가능하다
+
+1. proxy 서버 설정
+
+   - package.json
+
+   ```javascript
+   "proxy": "http://localhost:4000"
+   ```
+
+2. 도메인 수정
+
+   - src > api > posts.js
+
+   ```javascript
+   import axios from 'axios';
+
+   export const getPosts = async () => {
+     const response = await axios.get('/posts');
+     return response.data;
+   };
+   ```
+
+<br>
