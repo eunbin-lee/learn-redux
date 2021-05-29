@@ -455,3 +455,76 @@ CRA로 만들어진 프로젝트에서는 package.json에서 쉽게 설정이 �
    ```
 
 <br>
+
+### [Redux-saga]
+
+Generator에 기반한 미들웨어 <br>
+액션을 모니터링하고 있다가 특정 액션이 발생하면 이에 따라 특정 작업을 하는 방식 <br>
+(redux-thunk: 함수를 dispatch할 수 있게 해주는 미들웨어)
+
+- 비동기 작업을 진행할 때 기존 요청을 취소할 수 있다
+- 특정 액션이 발생했을 때 이에 따라 다른 액션을 디스패치 하거나 자바스크립트 코드를 실행할 수 있다
+- 웹소켓을 사용하는 경우 Channel 이라는 기능을 사용하여 더욱 효율적으로 코드를 관리할 수 있다
+- 비동기 작업이 실패했을 때 재시도하는 기능을 구현할 수 있다
+
+#### Generator
+
+- 함수의 흐름을 특정 구간에 멈춰놓았다가(`yield`) 다시 실행할 수 있다((`generator.next()`)
+- `yield` 를 통해 결과값을 여러 번 내보낼 수 있다
+
+<br>
+
+### [Set redux-saga]
+
+1. `yarn add redux-saga`
+
+2. src > modules > counter.js
+
+   ```javascript
+   // effects: 리덕스 사가 미들웨어가 수행하도록 작업을 명령하는 것
+   import {
+     delay,
+     put,
+     takeEvery,
+     takeLastest,
+     takeLeading,
+   } from 'redux-saga/effects';
+
+   function* increaseSaga() {
+     yield delay(1000); // 1초를 기다려라
+     yield put(increase()); // increase를 호출해서 액션 객체를 만들고 그 액션을 dispatch하도록 리덕스 사가 미들웨어에게 명령 (dispatch와 비슷)
+   }
+
+   export function* counterSaga() {
+     yield takeEvery(INCREASE_ASYNC, increaseSaga); // INCREASE_ASYNC 액션이 dispatch될 때마다 increaseSaga를 실행시킴
+     yield takeLastest(INCREASE_ASYNC, increaseSaga); // 1초를 기다리고 있는 도중에 새로운 게 들어오면 기존에 있던건 무시하고 가장 마지막으로 들어온 INCREASE_ASYNC만 처리
+     yield takeLastest(INCREASE_ASYNC, increaseSaga); // 가장 처음에 들어온 INCREASE_ASYNC 처리할 때까지 다른 작업은 실행하지 않음, 처음 INCREASE_ASYNC가 처리되면 새로운 작업 실행
+   }
+   ```
+
+3. src > modules > index.js
+
+   ```javascript
+   import { all } from 'redux-saga/effects';
+
+   export function* rootSaga() {
+     yield all([counterSaga()]);
+   }
+   ```
+
+4. src > index.js
+
+   ```javascript
+   import { createStore, applyMiddleware } from 'redux';
+   import rootReducer, { rootSaga } from './modules';
+   import createSagaMiddleware from 'redux-saga';
+
+   const sagaMiddleware = createSagaMiddleware();
+
+   const store = createStore(
+     rootReducer,
+     composeWithDevTools(applyMiddleware(sagaMiddleware)),
+   );
+
+   sagaMiddleware.run(rootSaga);
+   ```

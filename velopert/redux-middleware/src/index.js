@@ -1,36 +1,37 @@
-<<<<<<< HEAD
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// redux 적용
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './modules';
-// import myLogger from './middlewares/myLogger';
-// const store = createStore(rootReducer, applyMiddleware(myLogger));
+import rootReducer, { rootSaga } from './modules';
 
 import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxThunk from 'redux-thunk';
 
-// router
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
+import createSagaMiddleware from 'redux-saga';
+
 const customHistory = createBrowserHistory();
+const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   rootReducer,
   composeWithDevTools(
     applyMiddleware(
+      sagaMiddleware,
       ReduxThunk.withExtraArgument({ history: customHistory }),
       logger,
     ),
   ),
 );
+
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <Router history={customHistory}>
@@ -45,51 +46,3 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-=======
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-// redux 적용
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './modules';
-// import myLogger from './middlewares/myLogger';
-// const store = createStore(rootReducer, applyMiddleware(myLogger));
-
-import logger from 'redux-logger';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import ReduxThunk from 'redux-thunk';
-
-// router
-import { Router } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-
-const customHistory = createBrowserHistory();
-
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(
-    applyMiddleware(
-      ReduxThunk.withExtraArgument({ history: customHistory }),
-      logger,
-    ),
-  ),
-);
-
-ReactDOM.render(
-  <Router history={customHistory}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Router>,
-  document.getElementById('root'),
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
->>>>>>> b5a3bf1ab01ba3b559b25a1031c3b5bdcf03943b

@@ -1,22 +1,31 @@
+import { delay, put, takeEvery, takeLastest } from 'redux-saga/effects';
+
 // action type
 const INCREASE = 'INCREASE';
 const DECREASE = 'DECREASE';
+const INCREASE_ASYNC = 'INCREASE_ASYNC';
+const DECREASE_ASYNC = 'DECREASE_ASYNC';
 
 // action 생성함수
 export const increase = () => ({ type: INCREASE });
 export const decrease = () => ({ type: DECREASE });
+export const increaseAsync = () => ({ type: INCREASE_ASYNC });
+export const decreaseAsync = () => ({ type: DECREASE_ASYNC });
 
-// thunk 함수
-export const increaseAsync = () => (dispatch) => {
-  setTimeout(() => {
-    dispatch(increase());
-  }, 1000);
-};
-export const decreaseAsync = () => (dispatch) => {
-  setTimeout(() => {
-    dispatch(decrease());
-  }, 1000);
-};
+// saga
+function* increaseSaga() {
+  yield delay(1000);
+  yield put(increase());
+}
+function* decreaseSaga() {
+  yield delay(1000);
+  yield put(decrease());
+}
+
+export function* counterSaga() {
+  yield takeEvery(INCREASE_ASYNC, increaseSaga);
+  yield takeLastest(DECREASE_ASYNC, decreaseSaga);
+}
 
 // 초기 상태
 const initialState = 0;
