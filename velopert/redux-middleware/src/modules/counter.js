@@ -1,4 +1,4 @@
-import { delay, put, takeEvery, takeLastest } from 'redux-saga/effects';
+import { delay, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
 // action type
 const INCREASE = 'INCREASE';
@@ -24,7 +24,7 @@ function* decreaseSaga() {
 
 export function* counterSaga() {
   yield takeEvery(INCREASE_ASYNC, increaseSaga);
-  yield takeLastest(DECREASE_ASYNC, decreaseSaga);
+  yield takeLatest(DECREASE_ASYNC, decreaseSaga);
 }
 
 // 초기 상태
